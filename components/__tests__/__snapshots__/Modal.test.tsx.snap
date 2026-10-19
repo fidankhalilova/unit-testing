@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Modal matches the snapshot when open 1`] = `
+<DocumentFragment>
+  <div
+    class="fixed inset-0 flex items-center justify-center bg-black/50"
+    data-testid="backdrop"
+  >
+    <div
+      aria-labelledby="modal-title"
+      aria-modal="true"
+      class="w-full max-w-sm rounded bg-white p-6 text-black"
+      role="dialog"
+      tabindex="-1"
+    >
+      <h2
+        class="mb-3 text-lg font-semibold"
+        id="modal-title"
+      >
+        Confirm
+      </h2>
+      <p>
+        Are you sure?
+      </p>
+      <button
+        class="mt-4 rounded border px-3 py-1"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;

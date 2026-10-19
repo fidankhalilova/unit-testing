@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Unit Testing Core Components
 
-## Getting Started
+Jest and React Testing Library only. Next.js (TypeScript) and Tailwind.
 
-First, run the development server:
+## Scripts
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+| Command | Purpose |
+|---|---|
+| `npm test` | Run all tests once |
+| `npm run test:watch` | Re-run affected tests while coding |
+| `npm run test:ci` | CI mode: coverage, and snapshots are never auto-written |
+| `npm run ci` | Local CI simulation: lint, type-check, then tests |
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## What I tested and why
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**FormInput**
+- No error before the first blur, so users aren't told they're wrong mid-typing.
+- Error after blur, cleared as soon as the value is valid.
+- `aria-invalid` and `aria-describedby` wiring, checked via `toHaveAccessibleDescription`.
+- Keyboard focus, plus one snapshot of the error state.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**DataList** (API mocked with `jest.mock`, timers faked)
+- Loading, ready, empty (API and search) and error states.
+- Retry after failure.
+- Search filters only after the 300ms debounce.
 
-## Learn More
+**Modal**
+- Hidden when closed, labelled `role="dialog"` when open.
+- Closes on Escape, Close button and backdrop click, but not on a click inside the dialog.
+- Focus moves in on open and returns to the trigger on close.
+- One snapshot of the open state.
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Notes
+- Queries follow the priority order: `getByRole`, `getByLabelText`, text. The only `getByTestId` is the Modal backdrop, which has no role or label.
+- `queryBy*` for absence, `findBy*` for async, awaited `userEvent` throughout.
+- Coverage is a signal, not a target.
